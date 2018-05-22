@@ -1,0 +1,117 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="DatabaseModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="Company">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="name" Type="nvarchar" MaxLength="50" />
+    <Property Name="address" Type="nvarchar" MaxLength="50" />
+    <Property Name="headquarter" Type="nvarchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="CompanyDepartment">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="fk_department" Type="int" />
+    <Property Name="fk_company" Type="int" />
+  </EntityType>
+  <EntityType Name="DepartmenEmployee">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="fk_department" Type="int" />
+    <Property Name="fk_employee" Type="int" />
+  </EntityType>
+  <EntityType Name="Department">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="name" Type="nchar" MaxLength="10" />
+  </EntityType>
+  <EntityType Name="Employee">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="firstname" Type="nvarchar" MaxLength="50" />
+    <Property Name="lastname" Type="nvarchar" MaxLength="50" />
+    <Property Name="birthday" Type="datetime" />
+    <Property Name="gender" Type="bit" />
+    <Property Name="title" Type="nvarchar" MaxLength="50" />
+  </EntityType>
+  <Association Name="FK_CompanyDepartment_Company">
+    <End Role="Company" Type="Self.Company" Multiplicity="0..1" />
+    <End Role="CompanyDepartment" Type="Self.CompanyDepartment" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Company">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="CompanyDepartment">
+        <PropertyRef Name="fk_company" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_CompanyDepartment_Department">
+    <End Role="Department" Type="Self.Department" Multiplicity="0..1" />
+    <End Role="CompanyDepartment" Type="Self.CompanyDepartment" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Department">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="CompanyDepartment">
+        <PropertyRef Name="fk_department" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_DepartmenEmployee_Department">
+    <End Role="Department" Type="Self.Department" Multiplicity="0..1" />
+    <End Role="DepartmenEmployee" Type="Self.DepartmenEmployee" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Department">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="DepartmenEmployee">
+        <PropertyRef Name="fk_department" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_DepartmenEmployee_Employee">
+    <End Role="Employee" Type="Self.Employee" Multiplicity="0..1" />
+    <End Role="DepartmenEmployee" Type="Self.DepartmenEmployee" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Employee">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="DepartmenEmployee">
+        <PropertyRef Name="fk_employee" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="DatabaseModelStoreContainer">
+    <EntitySet Name="Company" EntityType="Self.Company" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="CompanyDepartment" EntityType="Self.CompanyDepartment" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="DepartmenEmployee" EntityType="Self.DepartmenEmployee" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Department" EntityType="Self.Department" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Employee" EntityType="Self.Employee" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_CompanyDepartment_Company" Association="Self.FK_CompanyDepartment_Company">
+      <End Role="Company" EntitySet="Company" />
+      <End Role="CompanyDepartment" EntitySet="CompanyDepartment" />
+    </AssociationSet>
+    <AssociationSet Name="FK_CompanyDepartment_Department" Association="Self.FK_CompanyDepartment_Department">
+      <End Role="Department" EntitySet="Department" />
+      <End Role="CompanyDepartment" EntitySet="CompanyDepartment" />
+    </AssociationSet>
+    <AssociationSet Name="FK_DepartmenEmployee_Department" Association="Self.FK_DepartmenEmployee_Department">
+      <End Role="Department" EntitySet="Department" />
+      <End Role="DepartmenEmployee" EntitySet="DepartmenEmployee" />
+    </AssociationSet>
+    <AssociationSet Name="FK_DepartmenEmployee_Employee" Association="Self.FK_DepartmenEmployee_Employee">
+      <End Role="Employee" EntitySet="Employee" />
+      <End Role="DepartmenEmployee" EntitySet="DepartmenEmployee" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

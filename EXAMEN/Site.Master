@@ -51,9 +51,7 @@
                 </div>
                 <div class="navbar-collapse collapse">
                     <ul class="nav navbar-nav">
-                        <li><a runat="server" href="~/Employees"><%= GetGlobalResourceObject("Translations", "C_employees") %></a></li>
-                        <li><a runat="server" href="~/Companies"><%= GetGlobalResourceObject("Translations", "C_companies") %></a></li>
-                        <li><a runat="server" href="~/Departments"><%= GetGlobalResourceObject("Translations", "C_departments") %></a></li>
+                        
                     </ul>
                 </div>
             </div>

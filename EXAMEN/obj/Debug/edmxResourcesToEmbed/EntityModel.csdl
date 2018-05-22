@@ -1,0 +1,125 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="DatabaseModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityContainer Name="DatabaseEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Company" EntityType="DatabaseModel.Company" />
+    <EntitySet Name="CompanyDepartment" EntityType="DatabaseModel.CompanyDepartment" />
+    <EntitySet Name="DepartmenEmployee" EntityType="DatabaseModel.DepartmenEmployee" />
+    <EntitySet Name="Department" EntityType="DatabaseModel.Department" />
+    <EntitySet Name="Employee" EntityType="DatabaseModel.Employee" />
+    <AssociationSet Name="FK_CompanyDepartment_Company" Association="DatabaseModel.FK_CompanyDepartment_Company">
+      <End Role="Company" EntitySet="Company" />
+      <End Role="CompanyDepartment" EntitySet="CompanyDepartment" />
+    </AssociationSet>
+    <AssociationSet Name="FK_CompanyDepartment_Department" Association="DatabaseModel.FK_CompanyDepartment_Department">
+      <End Role="Department" EntitySet="Department" />
+      <End Role="CompanyDepartment" EntitySet="CompanyDepartment" />
+    </AssociationSet>
+    <AssociationSet Name="FK_DepartmenEmployee_Department" Association="DatabaseModel.FK_DepartmenEmployee_Department">
+      <End Role="Department" EntitySet="Department" />
+      <End Role="DepartmenEmployee" EntitySet="DepartmenEmployee" />
+    </AssociationSet>
+    <AssociationSet Name="FK_DepartmenEmployee_Employee" Association="DatabaseModel.FK_DepartmenEmployee_Employee">
+      <End Role="Employee" EntitySet="Employee" />
+      <End Role="DepartmenEmployee" EntitySet="DepartmenEmployee" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="Company">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="address" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="headquarter" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="CompanyDepartment" Relationship="DatabaseModel.FK_CompanyDepartment_Company" FromRole="Company" ToRole="CompanyDepartment" />
+  </EntityType>
+  <EntityType Name="CompanyDepartment">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="fk_department" Type="Int32" />
+    <Property Name="fk_company" Type="Int32" />
+    <NavigationProperty Name="Company" Relationship="DatabaseModel.FK_CompanyDepartment_Company" FromRole="CompanyDepartment" ToRole="Company" />
+    <NavigationProperty Name="Department" Relationship="DatabaseModel.FK_CompanyDepartment_Department" FromRole="CompanyDepartment" ToRole="Department" />
+  </EntityType>
+  <EntityType Name="DepartmenEmployee">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="fk_department" Type="Int32" />
+    <Property Name="fk_employee" Type="Int32" />
+    <NavigationProperty Name="Department" Relationship="DatabaseModel.FK_DepartmenEmployee_Department" FromRole="DepartmenEmployee" ToRole="Department" />
+    <NavigationProperty Name="Employee" Relationship="DatabaseModel.FK_DepartmenEmployee_Employee" FromRole="DepartmenEmployee" ToRole="Employee" />
+  </EntityType>
+  <EntityType Name="Department">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="name" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+    <NavigationProperty Name="CompanyDepartment" Relationship="DatabaseModel.FK_CompanyDepartment_Department" FromRole="Department" ToRole="CompanyDepartment" />
+    <NavigationProperty Name="DepartmenEmployee" Relationship="DatabaseModel.FK_DepartmenEmployee_Department" FromRole="Department" ToRole="DepartmenEmployee" />
+  </EntityType>
+  <EntityType Name="Employee">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="firstname" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="lastname" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="birthday" Type="DateTime" Precision="3" />
+    <Property Name="gender" Type="Boolean" />
+    <Property Name="title" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="DepartmenEmployee" Relationship="DatabaseModel.FK_DepartmenEmployee_Employee" FromRole="Employee" ToRole="DepartmenEmployee" />
+  </EntityType>
+  <Association Name="FK_CompanyDepartment_Company">
+    <End Type="DatabaseModel.Company" Role="Company" Multiplicity="0..1" />
+    <End Type="DatabaseModel.CompanyDepartment" Role="CompanyDepartment" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Company">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="CompanyDepartment">
+        <PropertyRef Name="fk_company" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_CompanyDepartment_Department">
+    <End Type="DatabaseModel.Department" Role="Department" Multiplicity="0..1" />
+    <End Type="DatabaseModel.CompanyDepartment" Role="CompanyDepartment" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Department">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="CompanyDepartment">
+        <PropertyRef Name="fk_department" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_DepartmenEmployee_Department">
+    <End Type="DatabaseModel.Department" Role="Department" Multiplicity="0..1" />
+    <End Type="DatabaseModel.DepartmenEmployee" Role="DepartmenEmployee" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Department">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="DepartmenEmployee">
+        <PropertyRef Name="fk_department" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_DepartmenEmployee_Employee">
+    <End Type="DatabaseModel.Employee" Role="Employee" Multiplicity="0..1" />
+    <End Type="DatabaseModel.DepartmenEmployee" Role="DepartmenEmployee" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Employee">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="DepartmenEmployee">
+        <PropertyRef Name="fk_employee" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema>
