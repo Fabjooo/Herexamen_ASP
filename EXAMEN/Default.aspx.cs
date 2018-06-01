@@ -195,5 +195,21 @@ namespace EXAMEN
             }
             
         }
+
+        protected void rpCompany_OnItemDataBound(object sender, RepeaterItemEventArgs e)
+        {
+            var context = new DatabaseEntities();
+            if (e.Item.DataItem != null)
+            {
+                CompanyDepartment companyDepartment = (CompanyDepartment)e.Item.DataItem;
+                var departmentId = companyDepartment.fk_department;
+
+                var departmentEmployees = context.DepartmenEmployee.Where(x => x.fk_department == departmentId).ToList();
+
+                var rpEmployees = (Repeater)e.Item.FindControl("rpEmployees");
+                rpEmployees.DataSource = departmentEmployees;
+                rpEmployees.DataBind();
+            }
+        }
     }
 }

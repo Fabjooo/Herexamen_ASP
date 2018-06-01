@@ -11,13 +11,21 @@
         <asp:DropDownList ID="ddlCompanyLists" OnSelectedIndexChanged="ddlCompanyLists_OnSelectedIndexChanged" AutoPostBack="True" runat="server"></asp:DropDownList>
         <asp:UpdatePanel ID="upCompanyDetails" UpdateMode="Conditional" runat="server">
             <ContentTemplate>
-                <asp:Repeater ID="rpCompany" runat="server">
+                <asp:Repeater ID="rpCompany" OnItemDataBound="rpCompany_OnItemDataBound" runat="server">
                     <ItemTemplate>
                     <div class="row">
                         <h3><%# Eval("Department.name") %></h3>
                         <asp:LinkButton ID="lnkbtnEdit" CommandArgument='<%# Eval("Department.Id") %>' OnClick="lnkbtnEdit_OnClick" runat="server">Edit</asp:LinkButton>
                         <asp:LinkButton ID="lnkbtnDelete" CommandArgument='<%# Eval("Department.Id") %>' OnClick="lnkbtnDelete_OnClick" runat="server">Delete</asp:LinkButton>
                     </div>
+                        <asp:Repeater ID="rpEmployees" runat="server">
+                            <ItemTemplate>
+                                <div class="row">
+                                    <h4><%# Eval("Employee.firstname") %> <%# Eval("Employee.lastname") %></h4>
+
+                                </div>
+                            </ItemTemplate>
+                        </asp:Repeater>
                     </ItemTemplate>
                 </asp:Repeater>
             </ContentTemplate>
