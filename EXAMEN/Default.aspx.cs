@@ -165,5 +165,35 @@ namespace EXAMEN
             context.SaveChanges();
             upCompanyDetails.Update();
         }
+
+        protected void lnkbtnDelete_OnClick(object sender, EventArgs e)
+        {
+            var context = new DatabaseEntities();
+            var btn = (LinkButton)sender;
+            var departmentId = int.Parse(btn.CommandArgument);
+
+            //delete foreign key --> employees within department
+            var departmentEmployee = context.DepartmenEmployee.Where(x => x.fk_department == departmentId).ToList();
+            if(departmentEmployee != null)
+            foreach (var dpe in departmentEmployee)
+            {
+                context.DepartmenEmployee.Remove(dpe);
+                context.SaveChanges();
+                }
+            //delete the department which is linked to a company
+            var companyDepartment = context.CompanyDepartment.FirstOrDefault(x => x.fk_department == departmentId);
+            if(companyDepartment != null)
+            context.CompanyDepartment.Remove(companyDepartment);
+            context.SaveChanges();
+
+            //delete actual department
+            var department = context.Department.FirstOrDefault(x => x.Id == departmentId);
+            if (department != null)
+            {
+                context.Department.Remove(department);
+                context.SaveChanges();
+            }
+            
+        }
     }
 }

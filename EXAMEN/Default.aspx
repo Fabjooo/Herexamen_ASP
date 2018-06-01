@@ -16,7 +16,7 @@
                     <div class="row">
                         <h3><%# Eval("Department.name") %></h3>
                         <asp:LinkButton ID="lnkbtnEdit" CommandArgument='<%# Eval("Department.Id") %>' OnClick="lnkbtnEdit_OnClick" runat="server">Edit</asp:LinkButton>
-                        <asp:LinkButton ID="lnkbtnDelete" runat="server">Delete</asp:LinkButton>
+                        <asp:LinkButton ID="lnkbtnDelete" CommandArgument='<%# Eval("Department.Id") %>' OnClick="lnkbtnDelete_OnClick" runat="server">Delete</asp:LinkButton>
                     </div>
                     </ItemTemplate>
                 </asp:Repeater>
