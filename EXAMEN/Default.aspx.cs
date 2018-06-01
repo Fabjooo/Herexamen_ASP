@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data.Entity.Core.Common.EntitySql;
+using System.Data.Entity.Migrations;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Security.Cryptography.X509Certificates;
@@ -35,6 +36,11 @@ namespace EXAMEN
             ddlCompanies2.DataValueField = "Id";
             ddlCompanies2.DataTextField = "name";
             ddlCompanies2.DataBind();
+
+            ddlCompanyLists.DataSource = companyList;
+            ddlCompanyLists.DataValueField = "Id";
+            ddlCompanyLists.DataTextField = "name";
+            ddlCompanyLists.DataBind();
         }
 
         protected void btnSaveCompany_OnClick(object sender, EventArgs e)
@@ -67,14 +73,16 @@ namespace EXAMEN
             context.Department.Add(department);
             context.SaveChanges();
 
-            var newDepartment = context.Department.FirstOrDefault(x => x.name == department.name);
+            var newDepartment = context.Department.FirstOrDefault(x => x.Id == department.Id);
             var companyDepartment = new CompanyDepartment();
 
             companyDepartment.fk_company = Convert.ToInt32(ddlCompanies.SelectedValue);
             companyDepartment.fk_department = newDepartment.Id;
+            context.CompanyDepartment.Add(companyDepartment);
             context.SaveChanges();
 
             LoadDropdownControls();
+            upCompanyDetails.Update();
         }
 
         protected void btnSaveEmployee_OnClick(object sender, EventArgs e)
@@ -123,6 +131,39 @@ namespace EXAMEN
             ddlDepartmens.DataBind();
 
             UpdatePanel1.Update();
+        }
+
+        protected void ddlCompanyLists_OnSelectedIndexChanged(object sender, EventArgs e)
+        {
+            var context = new DatabaseEntities();
+            var companyId = Convert.ToInt32(ddlCompanyLists.SelectedValue);
+
+            var companydepartments = context.CompanyDepartment.Where(x => x.fk_company == companyId).OrderBy(x => x.Company.name).ToList();
+            rpCompany.DataSource = companydepartments;
+            rpCompany.DataBind();
+            upCompanyDetails.Update();
+        }
+
+        protected void lnkbtnEdit_OnClick(object sender, EventArgs e)
+        {
+            var context = new DatabaseEntities();
+            var btn = (LinkButton)sender;
+            Session["departmentid"] = Convert.ToString(int.Parse(btn.CommandArgument));
+            var departmentvalue = Convert.ToInt32(Session["departmentid"]);
+            var department = context.Department.FirstOrDefault(x => x.Id == departmentvalue);
+            txtEditDepartment.Text = department.name;
+            upEditDepartmentText.Update();
+            ScriptManager.RegisterStartupScript(this, this.GetType(), "ModalView", "<script>$(function() { $('#EditDepartmentModal').modal('show'); });</script>", false);
+        }
+
+        protected void btnSaveEditedDepartment_OnClick(object sender, EventArgs e)
+        {
+            var context = new DatabaseEntities();
+            var departmentid = Convert.ToInt32(Session["departmentid"]);
+            var department = context.Department.FirstOrDefault(x => x.Id == departmentid);
+            department.name = txtEditDepartment.Text;
+            context.SaveChanges();
+            upCompanyDetails.Update();
         }
     }
 }

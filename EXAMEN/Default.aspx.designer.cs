@@ -40,6 +40,33 @@ namespace EXAMEN {
         protected global::System.Web.UI.WebControls.Button btnAddEmployee;
         
         /// <summary>
+        /// ddlCompanyLists control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList ddlCompanyLists;
+        
+        /// <summary>
+        /// upCompanyDetails control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.UpdatePanel upCompanyDetails;
+        
+        /// <summary>
+        /// rpCompany control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Repeater rpCompany;
+        
+        /// <summary>
         /// txtCompanyName control.
         /// </summary>
         /// <remarks>
@@ -182,5 +209,32 @@ namespace EXAMEN {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btnSaveEmployee;
+        
+        /// <summary>
+        /// upEditDepartmentText control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.UpdatePanel upEditDepartmentText;
+        
+        /// <summary>
+        /// txtEditDepartment control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtEditDepartment;
+        
+        /// <summary>
+        /// btnSaveEditedDepartment control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnSaveEditedDepartment;
     }
 }

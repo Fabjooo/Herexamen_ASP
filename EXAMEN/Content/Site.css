@@ -27,7 +27,13 @@ textarea {
     margin-bottom: 1em;
 }
 
+#menubuttons {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
 
+    
+}
 /* Responsive: Portrait tablets and up */
 @media screen and (min-width: 768px) {
     .jumbotron {

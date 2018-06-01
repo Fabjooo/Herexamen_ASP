@@ -58,7 +58,7 @@
       <PropertyRef Name="Id" />
     </Key>
     <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="name" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+    <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
     <NavigationProperty Name="CompanyDepartment" Relationship="DatabaseModel.FK_CompanyDepartment_Department" FromRole="Department" ToRole="CompanyDepartment" />
     <NavigationProperty Name="DepartmenEmployee" Relationship="DatabaseModel.FK_DepartmenEmployee_Department" FromRole="Department" ToRole="DepartmenEmployee" />
   </EntityType>

@@ -30,7 +30,7 @@
       <PropertyRef Name="Id" />
     </Key>
     <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="name" Type="nchar" MaxLength="10" />
+    <Property Name="name" Type="nvarchar" MaxLength="50" />
   </EntityType>
   <EntityType Name="Employee">
     <Key>

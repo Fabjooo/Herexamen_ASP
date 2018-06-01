@@ -1,14 +1,29 @@
 ﻿<%@ Page Title="Herxamen ASP.NET 2018" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Default.aspx.cs" Inherits="EXAMEN._Default" %>
 
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
-
-    <div class="col-xs-12">
-        <div class="row">
+    
+    <div class="container" id="menubuttons">
             <asp:Button ID="btnAddCompany" runat="server" Text="Add company" CssClass="btn btn-info col-xs-2" data-toggle="modal" data-target="#companyModal"/>
             <asp:Button ID="btnAddDepartment" runat="server" Text="Add department" CssClass="btn btn-info col-xs-2" data-toggle="modal" data-target="#departmentModal"/>
             <asp:Button ID="btnAddEmployee" runat="server" Text="Add employee" CssClass="btn btn-info col-xs-2" data-toggle="modal" data-target="#employeeModal"/>
-        </div>
     </div>
+    <div class="container">
+        <asp:DropDownList ID="ddlCompanyLists" OnSelectedIndexChanged="ddlCompanyLists_OnSelectedIndexChanged" AutoPostBack="True" runat="server"></asp:DropDownList>
+        <asp:UpdatePanel ID="upCompanyDetails" UpdateMode="Conditional" runat="server">
+            <ContentTemplate>
+                <asp:Repeater ID="rpCompany" runat="server">
+                    <ItemTemplate>
+                    <div class="row">
+                        <h3><%# Eval("Department.name") %></h3>
+                        <asp:LinkButton ID="lnkbtnEdit" CommandArgument='<%# Eval("Department.Id") %>' OnClick="lnkbtnEdit_OnClick" runat="server">Edit</asp:LinkButton>
+                        <asp:LinkButton ID="lnkbtnDelete" runat="server">Delete</asp:LinkButton>
+                    </div>
+                    </ItemTemplate>
+                </asp:Repeater>
+            </ContentTemplate>
+        </asp:UpdatePanel>
+    </div>
+    
     <!-- Modal Company-->
     <div class="modal fade" id="companyModal" tabindex="-1" role="dialog" aria-labelledby="companyModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
@@ -79,6 +94,30 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                     <asp:Button ID="btnSaveEmployee" class="btn btn-primary" OnClick="btnSaveEmployee_OnClick" runat="server" Text="Save employee"/>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal EditDepartment -->
+    <div class="modal fade" id="EditDepartmentModal" tabindex="-1" role="dialog" aria-labelledby="EditDepartmentModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="EditDepartmentModalLabel">Edit department</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <asp:UpdatePanel ID="upEditDepartmentText" UpdateMode="Conditional" runat="server">
+                        <ContentTemplate>
+                            <asp:TextBox ID="txtEditDepartment" runat="server"></asp:TextBox>
+                        </ContentTemplate>
+                    </asp:UpdatePanel>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <asp:Button ID="btnSaveEditedDepartment" class="btn btn-primary" OnClick="btnSaveEditedDepartment_OnClick" CommandArgument='<%# Eval("Department.Id") %>' runat="server" Text="Save department"/>
                 </div>
             </div>
         </div>
