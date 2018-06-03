@@ -14,6 +14,8 @@ namespace EXAMEN
 {
     public partial class _Default : Page
     {
+        private DatabaseEntities _context = new DatabaseEntities();
+
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!IsPostBack)
@@ -24,28 +26,30 @@ namespace EXAMEN
 
         protected void LoadDropdownControls()
         {
-            var context = new DatabaseEntities();
-            var companyList = context.Company.OrderBy(x => x.name).ToList();
+            var companyList = _context.Company.OrderBy(x => x.name).ToList();
             ddlCompanies.DataSource = companyList;
             ddlCompanies.DataValueField = "Id";
             ddlCompanies.DataTextField = "name";
             ddlCompanies.DataBind();
+            ddlCompanies.SelectedIndex = 0;
 
-            var Department2List = context.Company.OrderBy(x => x.name).ToList();
+            var Department2List = _context.Company.OrderBy(x => x.name).ToList();
             ddlCompanies2.DataSource = Department2List;
             ddlCompanies2.DataValueField = "Id";
             ddlCompanies2.DataTextField = "name";
             ddlCompanies2.DataBind();
+            ddlCompanies2.SelectedIndex = 0;
 
             ddlCompanyLists.DataSource = companyList;
             ddlCompanyLists.DataValueField = "Id";
             ddlCompanyLists.DataTextField = "name";
             ddlCompanyLists.DataBind();
+            ddlCompanyLists.SelectedIndex = 0;
+
         }
 
         protected void btnSaveCompany_OnClick(object sender, EventArgs e)
         {
-            var context = new DatabaseEntities();
             var companyname = txtCompanyName.Text;
             var companyaddress = txtCompanyAddress.Text;
             var companyheadquarter = txtCompanyHeadquarter.Text;
@@ -56,38 +60,39 @@ namespace EXAMEN
             company.address = companyaddress;
             company.headquarter = companyheadquarter;
 
-            context.Company.Add(company);
-            context.SaveChanges();
+            _context.Company.Add(company);
+            _context.SaveChanges();
 
             LoadDropdownControls();
+            rpDepartments.DataBind();
+            upCompanyDetails.Update();
         }
 
         protected void btnSaveDepartment_OnClick(object sender, EventArgs e)
         {
-            var context = new DatabaseEntities();
             var departmentName = txtDepartment.Text;
 
             var department = new Department();
             department.name = departmentName;
 
-            context.Department.Add(department);
-            context.SaveChanges();
+            _context.Department.Add(department);
+            _context.SaveChanges();
 
-            var newDepartment = context.Department.FirstOrDefault(x => x.Id == department.Id);
+            var newDepartment = _context.Department.FirstOrDefault(x => x.Id == department.Id);
             var companyDepartment = new CompanyDepartment();
 
             companyDepartment.fk_company = Convert.ToInt32(ddlCompanies.SelectedValue);
             companyDepartment.fk_department = newDepartment.Id;
-            context.CompanyDepartment.Add(companyDepartment);
-            context.SaveChanges();
+            _context.CompanyDepartment.Add(companyDepartment);
+            _context.SaveChanges();
 
             LoadDropdownControls();
+            rpDepartments.DataBind();
             upCompanyDetails.Update();
         }
 
         protected void btnSaveEmployee_OnClick(object sender, EventArgs e)
         {
-            var context = new DatabaseEntities();
             var employeeFirstName = txtEmployeeFirstName.Text;
             var employeeLastName = txtEmployeeLastName.Text;
             var employeeBirthday = txtEmployeeBirthday.Text;
@@ -102,55 +107,54 @@ namespace EXAMEN
             employee.gender = employeeGender;
             employee.title = employeeTitle;
 
-            context.Employee.Add(employee);
-            context.SaveChanges();
+            _context.Employee.Add(employee);
+            _context.SaveChanges();
 
-            var newEmployee = context.Employee.SingleOrDefault(x =>
+            var newEmployee = _context.Employee.SingleOrDefault(x =>
                 x.firstname == employee.firstname && x.lastname == employee.lastname &&
                 employee.birthday == employee.birthday);
 
             var departmentEmployee = new DepartmenEmployee();
             departmentEmployee.fk_employee = newEmployee.Id;
             departmentEmployee.fk_department = Convert.ToInt32(ddlDepartmens.SelectedValue);
-            context.DepartmenEmployee.Add(departmentEmployee);
-            context.SaveChanges();
+            _context.DepartmenEmployee.Add(departmentEmployee);
+            _context.SaveChanges();
 
             LoadDropdownControls();
+            rpDepartments.DataBind();
+            upCompanyDetails.Update();
         }
 
         protected void ddlCompanies2_OnSelectedIndexChanged(object sender, EventArgs e)
         {
-            var context = new DatabaseEntities();
             var companyId = Convert.ToInt32(ddlCompanies2.SelectedValue);
 
-            var companydepartments = context.CompanyDepartment.Where(x => x.Company.Id.Equals(companyId)).ToList().Select(x => new{x.Department.Id, x.Department.name});
+            var companydepartments = _context.CompanyDepartment.Where(x => x.Company.Id.Equals(companyId)).ToList().Select(x => new{x.Department.Id, x.Department.name});
             
             ddlDepartmens.DataSource = companydepartments;
             ddlDepartmens.DataValueField = "Id";
             ddlDepartmens.DataTextField = "name";
             ddlDepartmens.DataBind();
 
-            UpdatePanel1.Update();
+            upAddEmployee.Update();
         }
 
         protected void ddlCompanyLists_OnSelectedIndexChanged(object sender, EventArgs e)
         {
-            var context = new DatabaseEntities();
             var companyId = Convert.ToInt32(ddlCompanyLists.SelectedValue);
 
-            var companydepartments = context.CompanyDepartment.Where(x => x.fk_company == companyId).OrderBy(x => x.Company.name).ToList();
-            rpCompany.DataSource = companydepartments;
-            rpCompany.DataBind();
+            var companydepartments = _context.CompanyDepartment.Where(x => x.fk_company == companyId).OrderBy(x => x.Company.name).ToList();
+            rpDepartments.DataSource = companydepartments;
+            rpDepartments.DataBind();
             upCompanyDetails.Update();
         }
 
         protected void lnkbtnEditDepartment_OnClick(object sender, EventArgs e)
         {
-            var context = new DatabaseEntities();
             var btn = (LinkButton)sender;
             Session["departmentid"] = Convert.ToString(int.Parse(btn.CommandArgument));
             var departmentvalue = Convert.ToInt32(Session["departmentid"]);
-            var department = context.Department.FirstOrDefault(x => x.Id == departmentvalue);
+            var department = _context.Department.FirstOrDefault(x => x.Id == departmentvalue);
             txtEditDepartment.Text = department.name;
             upEditDepartmentText.Update();
             ScriptManager.RegisterStartupScript(this, this.GetType(), "ModalView", "<script>$(function() { $('#EditDepartmentModal').modal('show'); });</script>", false);
@@ -158,53 +162,56 @@ namespace EXAMEN
 
         protected void btnSaveEditedDepartment_OnClick(object sender, EventArgs e)
         {
-            var context = new DatabaseEntities();
             var departmentid = Convert.ToInt32(Session["departmentid"]);
-            var department = context.Department.FirstOrDefault(x => x.Id == departmentid);
+            var department = _context.Department.FirstOrDefault(x => x.Id == departmentid);
             department.name = txtEditDepartment.Text;
-            context.SaveChanges();
+            _context.SaveChanges();
+
+            LoadDropdownControls();
+            rpDepartments.DataBind();
             upCompanyDetails.Update();
         }
 
         protected void lnkbtnDeleteDepartment_OnClick(object sender, EventArgs e)
         {
-            var context = new DatabaseEntities();
             var btn = (LinkButton)sender;
             var departmentId = int.Parse(btn.CommandArgument);
 
             //delete foreign key --> employees within department
-            var departmentEmployee = context.DepartmenEmployee.Where(x => x.fk_department == departmentId).ToList();
+            var departmentEmployee = _context.DepartmenEmployee.Where(x => x.fk_department == departmentId).ToList();
             if(departmentEmployee != null)
             foreach (var dpe in departmentEmployee)
             {
-                context.DepartmenEmployee.Remove(dpe);
-                context.SaveChanges();
+                _context.DepartmenEmployee.Remove(dpe);
+                _context.SaveChanges();
                 }
             //delete the department which is linked to a company
-            var companyDepartment = context.CompanyDepartment.FirstOrDefault(x => x.fk_department == departmentId);
+            var companyDepartment = _context.CompanyDepartment.FirstOrDefault(x => x.fk_department == departmentId);
             if(companyDepartment != null)
-            context.CompanyDepartment.Remove(companyDepartment);
-            context.SaveChanges();
+            _context.CompanyDepartment.Remove(companyDepartment);
+            _context.SaveChanges();
 
             //delete actual department
-            var department = context.Department.FirstOrDefault(x => x.Id == departmentId);
+            var department = _context.Department.FirstOrDefault(x => x.Id == departmentId);
             if (department != null)
             {
-                context.Department.Remove(department);
-                context.SaveChanges();
+                _context.Department.Remove(department);
+                _context.SaveChanges();
             }
-            
+
+            LoadDropdownControls();
+            rpDepartments.DataBind();
+            upCompanyDetails.Update();
         }
 
-        protected void rpCompany_OnItemDataBound(object sender, RepeaterItemEventArgs e)
+        protected void rpDepartments_OnItemDataBound(object sender, RepeaterItemEventArgs e)
         {
-            var context = new DatabaseEntities();
             if (e.Item.DataItem != null)
             {
                 CompanyDepartment companyDepartment = (CompanyDepartment)e.Item.DataItem;
                 var departmentId = companyDepartment.fk_department;
 
-                var departmentEmployees = context.DepartmenEmployee.Where(x => x.fk_department == departmentId).ToList();
+                var departmentEmployees = _context.DepartmenEmployee.Where(x => x.fk_department == departmentId).ToList();
                 var rpEmployees = (Repeater)e.Item.FindControl("rpEmployees");
                 rpEmployees.DataSource = departmentEmployees;
                 rpEmployees.DataBind();
@@ -213,12 +220,11 @@ namespace EXAMEN
 
         protected void lnkbtnEditEmployee_OnClick(object sender, EventArgs e)
         {
-            var context = new DatabaseEntities();
             var btn = (LinkButton)sender;
             var employeeId = int.Parse(btn.CommandArgument);
             Session["employeeid"] = Convert.ToString(employeeId);
 
-            var employee = context.Employee.FirstOrDefault(x => x.Id == employeeId);
+            var employee = _context.Employee.FirstOrDefault(x => x.Id == employeeId);
             if (employee != null)
             {
                 txtEditEmployeeFirstName.Text = employee.firstname;
@@ -240,31 +246,33 @@ namespace EXAMEN
 
         protected void lnkbtnDeleteEmployee_OnClick(object sender, EventArgs e)
         {
-            var context = new DatabaseEntities();
             var btn = (LinkButton)sender;
             var employeeId = int.Parse(btn.CommandArgument);
 
-            var employee = context.Employee.FirstOrDefault(x => x.Id == employeeId);
+            var employee = _context.Employee.FirstOrDefault(x => x.Id == employeeId);
             if (employee != null)
             {
                 //first delete foreign key
-                var departmentEmployee = context.DepartmenEmployee.FirstOrDefault(x => x.fk_employee == employeeId);
+                var departmentEmployee = _context.DepartmenEmployee.FirstOrDefault(x => x.fk_employee == employeeId);
                 if (departmentEmployee != null)
                 {
-                    context.DepartmenEmployee.Remove(departmentEmployee);
-                    context.SaveChanges();
+                    _context.DepartmenEmployee.Remove(departmentEmployee);
+                    _context.SaveChanges();
                 }
                 //delete actual employee
-                context.Employee.Remove(employee);
-                context.SaveChanges();
+                _context.Employee.Remove(employee);
+                _context.SaveChanges();
             }
+            
+            LoadDropdownControls();
+            rpDepartments.DataBind();
+            upCompanyDetails.Update();
         }
 
         protected void btnSaveEditedEmployee_OnClick(object sender, EventArgs e)
         {
-            var context = new DatabaseEntities();
             var employeeId = Convert.ToInt32(Session["employeeid"]);
-            var employee =  context.Employee.FirstOrDefault(x => x.Id == employeeId);
+            var employee = _context.Employee.FirstOrDefault(x => x.Id == employeeId);
             employee.firstname = txtEditEmployeeFirstName.Text;
             employee.lastname = txtEditEmployeeLastName.Text;
             employee.birthday = Convert.ToDateTime(txtEditEmployeeBirthday.Text);
@@ -277,8 +285,14 @@ namespace EXAMEN
                 employee.gender = false;
             }
             employee.title = txtEditEmployeeTitle.Text;
-            context.SaveChanges();
+            _context.SaveChanges();
+
             upEditEmployee.Update();
+
+            LoadDropdownControls();
+            rpDepartments.DataBind();
+            upCompanyDetails.Update();
+
         }
     }
 }

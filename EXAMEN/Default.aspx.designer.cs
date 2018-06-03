@@ -58,13 +58,13 @@ namespace EXAMEN {
         protected global::System.Web.UI.UpdatePanel upCompanyDetails;
         
         /// <summary>
-        /// rpCompany control.
+        /// rpDepartments control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Repeater rpCompany;
+        protected global::System.Web.UI.WebControls.Repeater rpDepartments;
         
         /// <summary>
         /// txtCompanyName control.
@@ -130,13 +130,13 @@ namespace EXAMEN {
         protected global::System.Web.UI.WebControls.Button btnSaveDepartment;
         
         /// <summary>
-        /// UpdatePanel1 control.
+        /// upAddEmployee control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.UpdatePanel UpdatePanel1;
+        protected global::System.Web.UI.UpdatePanel upAddEmployee;
         
         /// <summary>
         /// txtEmployeeFirstName control.

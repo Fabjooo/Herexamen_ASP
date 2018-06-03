@@ -15,20 +15,23 @@
             <asp:Button ID="btnAddEmployee" runat="server" Text="Add employee" CssClass="btn btn-info col-xs-2" data-toggle="modal" data-target="#employeeModal"/>
     </div>
     <div class="container">
+        <h2>Choose company:</h2>
         <asp:DropDownList ID="ddlCompanyLists" OnSelectedIndexChanged="ddlCompanyLists_OnSelectedIndexChanged" AutoPostBack="True" runat="server"></asp:DropDownList>
         <asp:UpdatePanel ID="upCompanyDetails" UpdateMode="Conditional" runat="server">
             <ContentTemplate>
-                <asp:Repeater ID="rpCompany" OnItemDataBound="rpCompany_OnItemDataBound" runat="server">
+                <h2>Departments: </h2>
+                <asp:Repeater ID="rpDepartments" OnItemDataBound="rpDepartments_OnItemDataBound" runat="server">
                     <ItemTemplate>
-                    <div class="row">
+                    <div class="col-xs-10">
                         <h3><%# Eval("Department.name") %></h3>
                         <asp:LinkButton ID="lnkbtnEditDepartment" CommandArgument='<%# Eval("Department.Id") %>' OnClick="lnkbtnEditDepartment_OnClick" runat="server">Edit</asp:LinkButton>
                         <asp:LinkButton ID="lnkbtnDeleteDepartment" CommandArgument='<%# Eval("Department.Id") %>' OnClick="lnkbtnDeleteDepartment_OnClick" runat="server">Delete</asp:LinkButton>
                     </div>
+                        <div class="clearfix"></div>
                         <asp:Repeater ID="rpEmployees" runat="server">
                             <ItemTemplate>
-                                <div class="row">
-                                    <h4><%# Eval("Employee.firstname") %> <%# Eval("Employee.lastname") %></h4>
+                                <div class="col-xs-10 employees">
+                                    <h3><%# Eval("Employee.firstname") %> <%# Eval("Employee.lastname") %></h3>
                                     <asp:LinkButton ID="lnkbtnEditEmployee" CommandArgument='<%# Eval("Employee.Id") %>' OnClick="lnkbtnEditEmployee_OnClick" runat="server">Edit</asp:LinkButton>
                                     <asp:LinkButton ID="lnkbtnDeleteEmployee" CommandArgument='<%# Eval("Employee.Id") %>' OnClientClick="return confirmation();" OnClick="lnkbtnDeleteEmployee_OnClick" runat="server">Delete</asp:LinkButton>
                                 </div>
@@ -94,7 +97,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <asp:UpdatePanel ID="UpdatePanel1" UpdateMode="Conditional" runat="server">
+                    <asp:UpdatePanel ID="upAddEmployee" UpdateMode="Conditional" runat="server">
                         <ContentTemplate>
                             <asp:TextBox ID="txtEmployeeFirstName" placeholder="employee's first name" runat="server" CssClass="form-control"></asp:TextBox>
                             <asp:TextBox ID="txtEmployeeLastName" placeholder="employee's last name" runat="server" CssClass="form-control"></asp:TextBox>
