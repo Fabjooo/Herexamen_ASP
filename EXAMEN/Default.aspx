@@ -1,7 +1,14 @@
 ﻿<%@ Page Title="Herxamen ASP.NET 2018" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Default.aspx.cs" Inherits="EXAMEN._Default" %>
 
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
-    
+    <script>
+        function confirmation() {
+            if (confirm("Are you sure you want to delete this employee?") == true)
+                return true;
+            else
+                return false;
+        }
+    </script>
     <div class="container" id="menubuttons">
             <asp:Button ID="btnAddCompany" runat="server" Text="Add company" CssClass="btn btn-info col-xs-2" data-toggle="modal" data-target="#companyModal"/>
             <asp:Button ID="btnAddDepartment" runat="server" Text="Add department" CssClass="btn btn-info col-xs-2" data-toggle="modal" data-target="#departmentModal"/>
@@ -15,16 +22,17 @@
                     <ItemTemplate>
                     <div class="row">
                         <h3><%# Eval("Department.name") %></h3>
-                        <asp:LinkButton ID="lnkbtnEdit" CommandArgument='<%# Eval("Department.Id") %>' OnClick="lnkbtnEdit_OnClick" runat="server">Edit</asp:LinkButton>
-                        <asp:LinkButton ID="lnkbtnDelete" CommandArgument='<%# Eval("Department.Id") %>' OnClick="lnkbtnDelete_OnClick" runat="server">Delete</asp:LinkButton>
+                        <asp:LinkButton ID="lnkbtnEditDepartment" CommandArgument='<%# Eval("Department.Id") %>' OnClick="lnkbtnEditDepartment_OnClick" runat="server">Edit</asp:LinkButton>
+                        <asp:LinkButton ID="lnkbtnDeleteDepartment" CommandArgument='<%# Eval("Department.Id") %>' OnClick="lnkbtnDeleteDepartment_OnClick" runat="server">Delete</asp:LinkButton>
                     </div>
                         <asp:Repeater ID="rpEmployees" runat="server">
                             <ItemTemplate>
                                 <div class="row">
                                     <h4><%# Eval("Employee.firstname") %> <%# Eval("Employee.lastname") %></h4>
-
+                                    <asp:LinkButton ID="lnkbtnEditEmployee" CommandArgument='<%# Eval("Employee.Id") %>' OnClick="lnkbtnEditEmployee_OnClick" runat="server">Edit</asp:LinkButton>
+                                    <asp:LinkButton ID="lnkbtnDeleteEmployee" CommandArgument='<%# Eval("Employee.Id") %>' OnClientClick="return confirmation();" OnClick="lnkbtnDeleteEmployee_OnClick" runat="server">Delete</asp:LinkButton>
                                 </div>
-                            </ItemTemplate>
+                            </ItemTemplate> 
                         </asp:Repeater>
                     </ItemTemplate>
                 </asp:Repeater>
@@ -125,9 +133,38 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <asp:Button ID="btnSaveEditedDepartment" class="btn btn-primary" OnClick="btnSaveEditedDepartment_OnClick" CommandArgument='<%# Eval("Department.Id") %>' runat="server" Text="Save department"/>
+                    <asp:Button ID="btnSaveEditedDepartment" class="btn btn-primary" OnClick="btnSaveEditedDepartment_OnClick" runat="server" Text="Save department"/>
                 </div>
             </div>
         </div>
     </div>
+    <!-- Modal EditEmployeeModal -->
+    <div class="modal fade" id="EditEmployeeModal" tabindex="-1" role="dialog" aria-labelledby="EditEmployeeModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="EditEmployeeModalLabel">Edit employee</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <asp:UpdatePanel ID="upEditEmployee" UpdateMode="Conditional" runat="server">
+                        <ContentTemplate>
+                            <asp:TextBox ID="txtEditEmployeeFirstName" placeholder="Voornaam" runat="server"></asp:TextBox>
+                            <asp:TextBox ID="txtEditEmployeeLastName" placeholder="Achternaam" runat="server"></asp:TextBox>
+                            <asp:TextBox ID="txtEditEmployeeBirthday" TextMode="DateTime" runat="server"></asp:TextBox>
+                            <asp:CheckBox ID="chkEditEmployeeGender" runat="server" />
+                            <asp:TextBox ID="txtEditEmployeeTitle" placeholder="Functie" runat="server"></asp:TextBox>
+                        </ContentTemplate>
+                    </asp:UpdatePanel>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <asp:Button ID="btnSaveEditedEmployee" class="btn btn-primary" OnClick="btnSaveEditedEmployee_OnClick" runat="server" Text="Save employee"/>
+                </div>
+            </div>
+        </div>
+    </div>
+    
 </asp:Content>

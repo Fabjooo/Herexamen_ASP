@@ -144,7 +144,7 @@ namespace EXAMEN
             upCompanyDetails.Update();
         }
 
-        protected void lnkbtnEdit_OnClick(object sender, EventArgs e)
+        protected void lnkbtnEditDepartment_OnClick(object sender, EventArgs e)
         {
             var context = new DatabaseEntities();
             var btn = (LinkButton)sender;
@@ -166,7 +166,7 @@ namespace EXAMEN
             upCompanyDetails.Update();
         }
 
-        protected void lnkbtnDelete_OnClick(object sender, EventArgs e)
+        protected void lnkbtnDeleteDepartment_OnClick(object sender, EventArgs e)
         {
             var context = new DatabaseEntities();
             var btn = (LinkButton)sender;
@@ -205,11 +205,80 @@ namespace EXAMEN
                 var departmentId = companyDepartment.fk_department;
 
                 var departmentEmployees = context.DepartmenEmployee.Where(x => x.fk_department == departmentId).ToList();
-
                 var rpEmployees = (Repeater)e.Item.FindControl("rpEmployees");
                 rpEmployees.DataSource = departmentEmployees;
                 rpEmployees.DataBind();
             }
+        }
+
+        protected void lnkbtnEditEmployee_OnClick(object sender, EventArgs e)
+        {
+            var context = new DatabaseEntities();
+            var btn = (LinkButton)sender;
+            var employeeId = int.Parse(btn.CommandArgument);
+            Session["employeeid"] = Convert.ToString(employeeId);
+
+            var employee = context.Employee.FirstOrDefault(x => x.Id == employeeId);
+            if (employee != null)
+            {
+                txtEditEmployeeFirstName.Text = employee.firstname;
+                txtEditEmployeeLastName.Text = employee.lastname;
+                txtEditEmployeeBirthday.Text = Convert.ToDateTime(employee.birthday).ToString("yyyy MMMM dd");
+                if (employee.gender == true)
+                {
+                    chkEditEmployeeGender.Checked = true;
+                }
+                else
+                {
+                    chkEditEmployeeGender.Checked = false;
+                }
+                txtEditEmployeeTitle.Text = employee.title;
+            }
+            upEditEmployee.Update();
+            ScriptManager.RegisterStartupScript(this, this.GetType(), "ModalView", "<script>$(function() { $('#EditEmployeeModal').modal('show'); });</script>", false);
+        }
+
+        protected void lnkbtnDeleteEmployee_OnClick(object sender, EventArgs e)
+        {
+            var context = new DatabaseEntities();
+            var btn = (LinkButton)sender;
+            var employeeId = int.Parse(btn.CommandArgument);
+
+            var employee = context.Employee.FirstOrDefault(x => x.Id == employeeId);
+            if (employee != null)
+            {
+                //first delete foreign key
+                var departmentEmployee = context.DepartmenEmployee.FirstOrDefault(x => x.fk_employee == employeeId);
+                if (departmentEmployee != null)
+                {
+                    context.DepartmenEmployee.Remove(departmentEmployee);
+                    context.SaveChanges();
+                }
+                //delete actual employee
+                context.Employee.Remove(employee);
+                context.SaveChanges();
+            }
+        }
+
+        protected void btnSaveEditedEmployee_OnClick(object sender, EventArgs e)
+        {
+            var context = new DatabaseEntities();
+            var employeeId = Convert.ToInt32(Session["employeeid"]);
+            var employee =  context.Employee.FirstOrDefault(x => x.Id == employeeId);
+            employee.firstname = txtEditEmployeeFirstName.Text;
+            employee.lastname = txtEditEmployeeLastName.Text;
+            employee.birthday = Convert.ToDateTime(txtEditEmployeeBirthday.Text);
+            if (chkEditEmployeeGender.Checked == true)
+            {
+                employee.gender = true;
+            }
+            else
+            {
+                employee.gender = false;
+            }
+            employee.title = txtEditEmployeeTitle.Text;
+            context.SaveChanges();
+            upEditEmployee.Update();
         }
     }
 }
