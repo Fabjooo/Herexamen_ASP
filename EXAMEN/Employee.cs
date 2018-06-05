@@ -25,9 +25,10 @@ namespace EXAMEN
         public string lastname { get; set; }
         public Nullable<System.DateTime> birthday { get; set; }
         public Nullable<bool> gender { get; set; }
-        public string title { get; set; }
+        public Nullable<int> jobtitle { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<DepartmenEmployee> DepartmenEmployee { get; set; }
+        public virtual JobTitle JobTitle1 { get; set; }
     }
 }

@@ -40,6 +40,15 @@ namespace EXAMEN {
         protected global::System.Web.UI.WebControls.Button btnAddEmployee;
         
         /// <summary>
+        /// btnAddJobTitle control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnAddJobTitle;
+        
+        /// <summary>
         /// ddlCompanyLists control.
         /// </summary>
         /// <remarks>
@@ -175,13 +184,13 @@ namespace EXAMEN {
         protected global::System.Web.UI.WebControls.RadioButton radioGender;
         
         /// <summary>
-        /// txtEmployeeTitle control.
+        /// ddlEmployeeTitle control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtEmployeeTitle;
+        protected global::System.Web.UI.WebControls.DropDownList ddlEmployeeTitle;
         
         /// <summary>
         /// ddlCompanies2 control.
@@ -209,6 +218,42 @@ namespace EXAMEN {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btnSaveEmployee;
+        
+        /// <summary>
+        /// upJobtitles control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.UpdatePanel upJobtitles;
+        
+        /// <summary>
+        /// rpJobtitles control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Repeater rpJobtitles;
+        
+        /// <summary>
+        /// txtAddJobTitle control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtAddJobTitle;
+        
+        /// <summary>
+        /// btnSaveJobtitle control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnSaveJobtitle;
         
         /// <summary>
         /// upEditDepartmentText control.
@@ -283,13 +328,13 @@ namespace EXAMEN {
         protected global::System.Web.UI.WebControls.CheckBox chkEditEmployeeGender;
         
         /// <summary>
-        /// txtEditEmployeeTitle control.
+        /// ddlEditEmployeeJobtitle control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtEditEmployeeTitle;
+        protected global::System.Web.UI.WebControls.DropDownList ddlEditEmployeeJobtitle;
         
         /// <summary>
         /// btnSaveEditedEmployee control.

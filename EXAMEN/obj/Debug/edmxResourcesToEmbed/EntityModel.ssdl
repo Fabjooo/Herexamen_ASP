@@ -41,7 +41,14 @@
     <Property Name="lastname" Type="nvarchar" MaxLength="50" />
     <Property Name="birthday" Type="datetime" />
     <Property Name="gender" Type="bit" />
-    <Property Name="title" Type="nvarchar" MaxLength="50" />
+    <Property Name="jobtitle" Type="int" />
+  </EntityType>
+  <EntityType Name="JobTitle">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="description" Type="nvarchar" MaxLength="50" />
   </EntityType>
   <Association Name="FK_CompanyDepartment_Company">
     <End Role="Company" Type="Self.Company" Multiplicity="0..1" />
@@ -91,12 +98,25 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="FK_Employee_JobTitle">
+    <End Role="JobTitle" Type="Self.JobTitle" Multiplicity="0..1" />
+    <End Role="Employee" Type="Self.Employee" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="JobTitle">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Employee">
+        <PropertyRef Name="jobtitle" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <EntityContainer Name="DatabaseModelStoreContainer">
     <EntitySet Name="Company" EntityType="Self.Company" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="CompanyDepartment" EntityType="Self.CompanyDepartment" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="DepartmenEmployee" EntityType="Self.DepartmenEmployee" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Department" EntityType="Self.Department" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Employee" EntityType="Self.Employee" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="JobTitle" EntityType="Self.JobTitle" Schema="dbo" store:Type="Tables" />
     <AssociationSet Name="FK_CompanyDepartment_Company" Association="Self.FK_CompanyDepartment_Company">
       <End Role="Company" EntitySet="Company" />
       <End Role="CompanyDepartment" EntitySet="CompanyDepartment" />
@@ -112,6 +132,10 @@
     <AssociationSet Name="FK_DepartmenEmployee_Employee" Association="Self.FK_DepartmenEmployee_Employee">
       <End Role="Employee" EntitySet="Employee" />
       <End Role="DepartmenEmployee" EntitySet="DepartmenEmployee" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Employee_JobTitle" Association="Self.FK_Employee_JobTitle">
+      <End Role="JobTitle" EntitySet="JobTitle" />
+      <End Role="Employee" EntitySet="Employee" />
     </AssociationSet>
   </EntityContainer>
 </Schema>

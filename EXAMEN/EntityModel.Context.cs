@@ -30,5 +30,6 @@ namespace EXAMEN
         public virtual DbSet<DepartmenEmployee> DepartmenEmployee { get; set; }
         public virtual DbSet<Department> Department { get; set; }
         public virtual DbSet<Employee> Employee { get; set; }
+        public virtual DbSet<JobTitle> JobTitle { get; set; }
     }
 }

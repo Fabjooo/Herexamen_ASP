@@ -40,11 +40,19 @@
     <EntitySetMapping Name="Employee">
       <EntityTypeMapping TypeName="DatabaseModel.Employee">
         <MappingFragment StoreEntitySet="Employee">
-          <ScalarProperty Name="title" ColumnName="title" />
+          <ScalarProperty Name="jobtitle" ColumnName="jobtitle" />
           <ScalarProperty Name="gender" ColumnName="gender" />
           <ScalarProperty Name="birthday" ColumnName="birthday" />
           <ScalarProperty Name="lastname" ColumnName="lastname" />
           <ScalarProperty Name="firstname" ColumnName="firstname" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="JobTitle">
+      <EntityTypeMapping TypeName="DatabaseModel.JobTitle">
+        <MappingFragment StoreEntitySet="JobTitle">
+          <ScalarProperty Name="description" ColumnName="description" />
           <ScalarProperty Name="Id" ColumnName="Id" />
         </MappingFragment>
       </EntityTypeMapping>

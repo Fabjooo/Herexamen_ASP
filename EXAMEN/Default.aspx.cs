@@ -46,6 +46,22 @@ namespace EXAMEN
             ddlCompanyLists.DataBind();
             ddlCompanyLists.SelectedIndex = 0;
 
+            var jobtitles = _context.JobTitle.OrderBy(x => x.description).ToList();
+            ddlEmployeeTitle.DataSource = jobtitles;
+            ddlEmployeeTitle.DataValueField = "Id";
+            ddlEmployeeTitle.DataTextField = "description";
+            ddlEmployeeTitle.DataBind();
+            upAddEmployee.Update();
+
+            ddlEditEmployeeJobtitle.DataSource = jobtitles;
+            ddlEditEmployeeJobtitle.DataValueField = "Id";
+            ddlEditEmployeeJobtitle.DataTextField = "description";
+            ddlEditEmployeeJobtitle.DataBind();
+            upEditEmployee.Update();
+
+            rpJobtitles.DataSource = jobtitles;
+            rpJobtitles.DataBind();
+            upJobtitles.Update();
         }
 
         protected void btnSaveCompany_OnClick(object sender, EventArgs e)
@@ -97,7 +113,7 @@ namespace EXAMEN
             var employeeLastName = txtEmployeeLastName.Text;
             var employeeBirthday = txtEmployeeBirthday.Text;
             var employeeGender = radioGender.Checked;
-            var employeeTitle = txtEmployeeTitle.Text;
+            var employeeTitle = ddlEmployeeTitle.SelectedValue;
 
             var employee = new Employee();
 
@@ -105,7 +121,7 @@ namespace EXAMEN
             employee.lastname = employeeLastName;
             employee.birthday = Convert.ToDateTime(employeeBirthday);
             employee.gender = employeeGender;
-            employee.title = employeeTitle;
+            employee.jobtitle = Convert.ToInt32(employeeTitle);
 
             _context.Employee.Add(employee);
             _context.SaveChanges();
@@ -119,6 +135,12 @@ namespace EXAMEN
             departmentEmployee.fk_department = Convert.ToInt32(ddlDepartmens.SelectedValue);
             _context.DepartmenEmployee.Add(departmentEmployee);
             _context.SaveChanges();
+
+            txtEmployeeFirstName.Text = "";
+            txtEmployeeLastName.Text = "";
+            txtEmployeeBirthday.Text = "";
+            radioGender.Checked = false;
+            ddlEmployeeTitle.SelectedIndex = 0;
 
             LoadDropdownControls();
             rpDepartments.DataBind();
@@ -238,7 +260,9 @@ namespace EXAMEN
                 {
                     chkEditEmployeeGender.Checked = false;
                 }
-                txtEditEmployeeTitle.Text = employee.title;
+
+                var jobtitle = _context.JobTitle.FirstOrDefault(x => x.Id == employee.jobtitle);
+                ddlEditEmployeeJobtitle.SelectedValue = Convert.ToString(jobtitle.Id);
             }
             upEditEmployee.Update();
             ScriptManager.RegisterStartupScript(this, this.GetType(), "ModalView", "<script>$(function() { $('#EditEmployeeModal').modal('show'); });</script>", false);
@@ -284,7 +308,7 @@ namespace EXAMEN
             {
                 employee.gender = false;
             }
-            employee.title = txtEditEmployeeTitle.Text;
+            employee.jobtitle = Convert.ToInt32(ddlEditEmployeeJobtitle.SelectedValue);
             _context.SaveChanges();
 
             upEditEmployee.Update();
@@ -293,6 +317,32 @@ namespace EXAMEN
             rpDepartments.DataBind();
             upCompanyDetails.Update();
 
+        }
+
+        protected void btnSaveJobtitle_OnClick(object sender, EventArgs e)
+        {
+            var txtjobtitle = txtAddJobTitle.Text;
+            var jobtitle = new JobTitle();
+            jobtitle.description = txtjobtitle;
+            _context.JobTitle.Add(jobtitle);
+            _context.SaveChanges();
+            txtAddJobTitle.Text = "";
+            LoadDropdownControls();
+        }
+
+        protected void btndeleteJobtitle_OnClick(object sender, EventArgs e)
+        {
+            var btn = (Button)sender;
+            var jobtitleId = int.Parse(btn.CommandArgument);
+
+            var jobtitle = _context.JobTitle.FirstOrDefault(x => x.Id == jobtitleId);
+            if (jobtitle != null)
+            {
+                _context.JobTitle.Remove(jobtitle);
+                _context.SaveChanges();
+            }
+            
+            LoadDropdownControls();
         }
     }
 }

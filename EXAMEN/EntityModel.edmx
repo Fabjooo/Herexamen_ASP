@@ -46,7 +46,14 @@
           <Property Name="lastname" Type="nvarchar" MaxLength="50" />
           <Property Name="birthday" Type="datetime" />
           <Property Name="gender" Type="bit" />
-          <Property Name="title" Type="nvarchar" MaxLength="50" />
+          <Property Name="jobtitle" Type="int" />
+        </EntityType>
+        <EntityType Name="JobTitle">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="description" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <Association Name="FK_CompanyDepartment_Company">
           <End Role="Company" Type="Self.Company" Multiplicity="0..1" />
@@ -96,12 +103,25 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Employee_JobTitle">
+          <End Role="JobTitle" Type="Self.JobTitle" Multiplicity="0..1" />
+          <End Role="Employee" Type="Self.Employee" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="JobTitle">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Employee">
+              <PropertyRef Name="jobtitle" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityContainer Name="DatabaseModelStoreContainer">
           <EntitySet Name="Company" EntityType="Self.Company" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CompanyDepartment" EntityType="Self.CompanyDepartment" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DepartmenEmployee" EntityType="Self.DepartmenEmployee" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Department" EntityType="Self.Department" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Employee" EntityType="Self.Employee" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="JobTitle" EntityType="Self.JobTitle" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK_CompanyDepartment_Company" Association="Self.FK_CompanyDepartment_Company">
             <End Role="Company" EntitySet="Company" />
             <End Role="CompanyDepartment" EntitySet="CompanyDepartment" />
@@ -118,6 +138,10 @@
             <End Role="Employee" EntitySet="Employee" />
             <End Role="DepartmenEmployee" EntitySet="DepartmenEmployee" />
           </AssociationSet>
+          <AssociationSet Name="FK_Employee_JobTitle" Association="Self.FK_Employee_JobTitle">
+            <End Role="JobTitle" EntitySet="JobTitle" />
+            <End Role="Employee" EntitySet="Employee" />
+          </AssociationSet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
@@ -129,6 +153,7 @@
           <EntitySet Name="DepartmenEmployee" EntityType="DatabaseModel.DepartmenEmployee" />
           <EntitySet Name="Department" EntityType="DatabaseModel.Department" />
           <EntitySet Name="Employee" EntityType="DatabaseModel.Employee" />
+          <EntitySet Name="JobTitle" EntityType="DatabaseModel.JobTitle" />
           <AssociationSet Name="FK_CompanyDepartment_Company" Association="DatabaseModel.FK_CompanyDepartment_Company">
             <End Role="Company" EntitySet="Company" />
             <End Role="CompanyDepartment" EntitySet="CompanyDepartment" />
@@ -144,6 +169,10 @@
           <AssociationSet Name="FK_DepartmenEmployee_Employee" Association="DatabaseModel.FK_DepartmenEmployee_Employee">
             <End Role="Employee" EntitySet="Employee" />
             <End Role="DepartmenEmployee" EntitySet="DepartmenEmployee" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Employee_JobTitle" Association="DatabaseModel.FK_Employee_JobTitle">
+            <End Role="JobTitle" EntitySet="JobTitle" />
+            <End Role="Employee" EntitySet="Employee" />
           </AssociationSet>
         </EntityContainer>
         <EntityType Name="Company">
@@ -194,8 +223,17 @@
           <Property Name="lastname" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="birthday" Type="DateTime" Precision="3" />
           <Property Name="gender" Type="Boolean" />
-          <Property Name="title" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="jobtitle" Type="Int32" />
           <NavigationProperty Name="DepartmenEmployee" Relationship="DatabaseModel.FK_DepartmenEmployee_Employee" FromRole="Employee" ToRole="DepartmenEmployee" />
+          <NavigationProperty Name="JobTitle1" Relationship="DatabaseModel.FK_Employee_JobTitle" FromRole="Employee" ToRole="JobTitle" />
+        </EntityType>
+        <EntityType Name="JobTitle">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="description" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Employee" Relationship="DatabaseModel.FK_Employee_JobTitle" FromRole="JobTitle" ToRole="Employee" />
         </EntityType>
         <Association Name="FK_CompanyDepartment_Company">
           <End Type="DatabaseModel.Company" Role="Company" Multiplicity="0..1" />
@@ -245,6 +283,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Employee_JobTitle">
+          <End Type="DatabaseModel.JobTitle" Role="JobTitle" Multiplicity="0..1" />
+          <End Type="DatabaseModel.Employee" Role="Employee" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="JobTitle">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Employee">
+              <PropertyRef Name="jobtitle" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -290,11 +340,19 @@
           <EntitySetMapping Name="Employee">
             <EntityTypeMapping TypeName="DatabaseModel.Employee">
               <MappingFragment StoreEntitySet="Employee">
-                <ScalarProperty Name="title" ColumnName="title" />
+                <ScalarProperty Name="jobtitle" ColumnName="jobtitle" />
                 <ScalarProperty Name="gender" ColumnName="gender" />
                 <ScalarProperty Name="birthday" ColumnName="birthday" />
                 <ScalarProperty Name="lastname" ColumnName="lastname" />
                 <ScalarProperty Name="firstname" ColumnName="firstname" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="JobTitle">
+            <EntityTypeMapping TypeName="DatabaseModel.JobTitle">
+              <MappingFragment StoreEntitySet="JobTitle">
+                <ScalarProperty Name="description" ColumnName="description" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
